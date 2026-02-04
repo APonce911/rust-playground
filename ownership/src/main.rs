@@ -75,18 +75,18 @@ fn new_owner_of_s(string :String) { // string is now in scope, rust moved s to s
     println!("{string} is still in scope");
 } // string is now out of scope, Rust drops it
 
-fn receives_and_give_back(string :String) -> String {  // string is now in scope, rust moved s to string
+fn receives_and_give_back(string: String) -> String {  // string is now in scope, rust moved s to string
     println!("{string} was borrowed");
     string // return string, gives back ownership
 }
 
 // returning tuples is a way to pass ownership from arguments + other calculations from functions
-fn cumbersome_length_calculator (string :String) -> (String, usize) {
-    let len = string.len();     // len() returns the length of a String
-    (string, len)                // return tuple (len,string), gives back ownership
+fn cumbersome_length_calculator (string: String) -> (String, usize) {
+    let len = string.len(); // len() returns the length of a String
+    (string, len) // return tuple (len,string), gives back ownership
 }
 
-fn calculate_length(string_ref :&String) -> usize { // string_ref is a reference to a string
+fn calculate_length(string_ref: &String) -> usize { // string_ref is a reference to a string
     string_ref.len()
 } // string goes out of scope. Because it's not the owner of the data it refers to, it's not dropped.
 
@@ -94,7 +94,7 @@ fn calculate_length(string_ref :&String) -> usize { // string_ref is a reference
 //     string_ref.push_str(", world");
 // }
 
-fn change_mut_ref(string_ref :&mut String) {
+fn change_mut_ref(string_ref: &mut String) {
     string_ref.push_str(" can be changed");
 }
 
