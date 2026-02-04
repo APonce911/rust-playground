@@ -17,6 +17,9 @@ fn main() {
     // changes to result variables in the while countdown context did not affect result immutable variable
     // it creates a copy of the value of the variable result and assign number
     println!("The result is {result}");
+
+    chapters_counter();
+    finish_countdown();
 }
 
 fn counter_loop() {
@@ -46,4 +49,22 @@ fn while_countdown(mut number :u32) {
         number -= 1;
     }
     println!("LIFTOFF!!!");
+}
+
+fn chapters_counter(){
+    let chapters: [u8; 3] = [1, 2, 3];
+
+    for chapter in chapters {
+        println!("I've read chapter: {chapter}!");
+    }
+}
+
+fn finish_countdown(){
+
+    // .. exclusive range . Eql ruby ..
+    // ..+ for incluse range. Eql ruby ...
+    for number in (1..=3).rev() {
+        println!("{number}!");
+    }
+    println!("bye!!!");
 }
