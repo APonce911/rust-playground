@@ -18,7 +18,6 @@ fn main() {
     // println!("{s1}, is cool!"); // do not work, because s1 has become an invalid reference to prevent memory corruption
     println!("{s2}, is cool!");
 
-
     let mut s = String::from("Old");
     s = String::from("New");
 
@@ -26,7 +25,7 @@ fn main() {
 
     new_owner_of_s(s); // moves s to new owner
 
-    // println!("{s} assignment trigger Rust drop!"); // will note work
+    // println!("{s} assignment trigger Rust drop!"); // will not work
 
     let c1 = String::from("Clone");
     let c2 = c1.clone(); // deep copy. Copy heaps data as well
@@ -44,6 +43,7 @@ fn main() {
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>());
 }
- fn new_owner_of_s(string :String) { // string is now in scope, rust moved s to string
-  print!("{string} is still in scope", );
- } // string is now out of scope, Rust drops it
+
+fn new_owner_of_s(string :String) { // string is now in scope, rust moved s to string
+    print!("{string} is still in scope");
+} // string is now out of scope, Rust drops it
