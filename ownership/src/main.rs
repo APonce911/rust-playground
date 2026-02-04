@@ -17,6 +17,12 @@ fn main() {
 
     // println!("{s1}, is cool!"); // do not work, because s1 has become an invalid reference to prevent memory corruption
     println!("{s2}, is cool!");
+
+
+    let mut s = String::from("Old");
+    s = String::from("New");
+
+    println!("{s} assignment trigger Rust drop!");
   }
 
 fn print_type_of<T>(_: &T) {
