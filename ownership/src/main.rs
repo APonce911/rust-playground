@@ -54,7 +54,11 @@ fn main() {
     println!("string: {s4}, length: {len}");
 
     // change_ref(&s4); //wouldn't work. references are immutable
-    println!("{s4}");
+
+    let mut s5 = String::from("Mut string ref");
+    change_mut_ref(&mut s5);
+
+    println!("{s5}");
   }
 
 fn print_type_of<T>(_: &T) {
@@ -80,6 +84,10 @@ fn calculate_length(string_ref :&String) -> usize { // string_ref is a reference
     string_ref.len()
 } // string goes out of scope. Because it's not the owner of the data it refers to, it's not dropped.
 
-fn change_ref(string_ref :&String) {
-    string_ref.push_str(", world");
+// fn change_ref(string_ref :&String) {
+//     string_ref.push_str(", world");
+// }
+
+fn change_mut_ref(string_ref :&mut String) {
+    string_ref.push_str(" can be changed");
 }
