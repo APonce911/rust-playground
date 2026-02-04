@@ -32,6 +32,9 @@ fn main() {
     let s3 = receives_and_give_back(s2); // moves s to new owner
     println!("{s3} is back. Functions returns gives back ownership");
 
+    let (s4, len) :(String, usize) = cumbersome_length_calculator(s3);
+    println!("{s4} is back, length {len} as well");
+
     let c1 = String::from("Clone");
     let c2 = c1.clone(); // deep copy. Copy heaps data as well
 
@@ -57,3 +60,10 @@ fn receives_and_give_back(string :String) -> String {  // string is now in scope
     println!("{string} was borrowed");
     string // return string, gives back ownership
 }
+
+// returning tuples is a way to pass ownership from arguments + other calculations from functions
+fn cumbersome_length_calculator (string :String) -> (String, usize) {
+    let len = string.len();     // len() returns the length of a String
+    (string, len)                // return tuple (len,string), gives back ownership
+}
+
