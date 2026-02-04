@@ -28,6 +28,13 @@ fn main() {
     let c2 = c1.clone(); // deep copy. Copy heaps data as well
 
     println!("c1 = {c1}, c2 = {c2}");
+
+    let i1 = 1; // i32 implements Copy trait
+    print_type_of(&i1);
+
+    let i2 = i1.clone(); // copy i2 to stack
+
+    println!("i1 = {i1}, i2 = {i2}"); // works, both i1 and i2 are valid
   }
 
 fn print_type_of<T>(_: &T) {
