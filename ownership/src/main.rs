@@ -59,6 +59,12 @@ fn main() {
     change_mut_ref(&mut s5);
 
     println!("{s5}");
+
+    // dangling reference
+    // let reference_to_nothing = dangle(); // doesn't work
+    let reference_to_string = no_dangle();  // works because the ownership of string is now reference_to_string
+    println!("{reference_to_string}");
+
   }
 
 fn print_type_of<T>(_: &T) {
@@ -90,4 +96,16 @@ fn calculate_length(string_ref :&String) -> usize { // string_ref is a reference
 
 fn change_mut_ref(string_ref :&mut String) {
     string_ref.push_str(" can be changed");
+}
+
+// fn dangle() -> &String {
+//     let s = String::from("hello");
+
+//     &s
+// }
+
+fn no_dangle() -> String {
+    let s = String::from("string from other context");
+
+    s
 }
