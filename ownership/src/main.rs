@@ -23,6 +23,11 @@ fn main() {
     s = String::from("New");
 
     println!("{s} assignment trigger Rust drop!");
+
+    let c1 = String::from("Clone");
+    let c2 = c1.clone(); // deep copy. Copy heaps data as well
+
+    println!("c1 = {c1}, c2 = {c2}");
   }
 
 fn print_type_of<T>(_: &T) {
