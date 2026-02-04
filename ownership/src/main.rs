@@ -46,6 +46,15 @@ fn main() {
     let i2 = i1.clone(); // copy i2 to stack
 
     println!("i1 = {i1}, i2 = {i2}"); // works, both i1 and i2 are valid
+
+    // now a more elegant way to calculate length without passing ownership
+    // using references
+
+    let len = calculate_length(&s4);
+    println!("string: {s4}, length: {len}");
+
+    // change_ref(&s4); //wouldn't work. references are immutable
+    println!("{s4}");
   }
 
 fn print_type_of<T>(_: &T) {
@@ -67,3 +76,10 @@ fn cumbersome_length_calculator (string :String) -> (String, usize) {
     (string, len)                // return tuple (len,string), gives back ownership
 }
 
+fn calculate_length(string_ref :&String) -> usize { // string_ref is a reference to a string
+    string_ref.len()
+} // string goes out of scope. Because it's not the owner of the data it refers to, it's not dropped.
+
+fn change_ref(string_ref :&String) {
+    string_ref.push_str(", world");
+}
