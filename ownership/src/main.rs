@@ -1,5 +1,4 @@
 fn main() {
-
     let literal = "hello";
     println!("{literal}");
     print_type_of(&literal); // &str
@@ -24,7 +23,7 @@ fn main() {
     println!("{s} assignment trigger Rust drop!");
 
     new_owner_of_s(s); // moves s to new owner
-    
+
     // println!("{s} assignment trigger Rust drop!"); // will not work
     println!("s was dropped");
 
@@ -32,7 +31,7 @@ fn main() {
     let s3 = receives_and_give_back(s2); // moves s to new owner
     println!("{s3} is back. Functions returns gives back ownership");
 
-    let (s4, len) :(String, usize) = cumbersome_length_calculator(s3);
+    let (s4, len): (String, usize) = cumbersome_length_calculator(s3);
     println!("{s4} is back, length {len} as well");
 
     let c1 = String::from("Clone");
@@ -62,10 +61,9 @@ fn main() {
 
     // dangling reference
     // let reference_to_nothing = dangle(); // doesn't work
-    let reference_to_string = no_dangle();  // works because the ownership of string is now reference_to_string
+    let reference_to_string = no_dangle(); // works because the ownership of string is now reference_to_string
     println!("{reference_to_string}");
-
-  }
+}
 
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>());
@@ -81,7 +79,7 @@ fn receives_and_give_back(string: String) -> String {  // string is now in scope
 }
 
 // returning tuples is a way to pass ownership from arguments + other calculations from functions
-fn cumbersome_length_calculator (string: String) -> (String, usize) {
+fn cumbersome_length_calculator(string: String) -> (String, usize) {
     let len = string.len(); // len() returns the length of a String
     (string, len) // return tuple (len,string), gives back ownership
 }
