@@ -24,8 +24,13 @@ fn main() {
     println!("{s} assignment trigger Rust drop!");
 
     new_owner_of_s(s); // moves s to new owner
-
+    
     // println!("{s} assignment trigger Rust drop!"); // will not work
+    println!("s was dropped");
+
+    let s2 = String::from("New New");
+    let s3 = receives_and_give_back(s2); // moves s to new owner
+    println!("{s3} is back. Functions returns gives back ownership");
 
     let c1 = String::from("Clone");
     let c2 = c1.clone(); // deep copy. Copy heaps data as well
@@ -45,5 +50,10 @@ fn print_type_of<T>(_: &T) {
 }
 
 fn new_owner_of_s(string :String) { // string is now in scope, rust moved s to string
-    print!("{string} is still in scope");
+    println!("{string} is still in scope");
 } // string is now out of scope, Rust drops it
+
+fn receives_and_give_back(string :String) -> String {  // string is now in scope, rust moved s to string
+    println!("{string} was borrowed");
+    string // return string, gives back ownership
+}
