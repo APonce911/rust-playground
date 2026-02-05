@@ -58,7 +58,7 @@ mod back_of_house {
 }
 
 // use crate::front_of_house::hosting;
-use crate::front_of_house::hosting as host;
+pub use crate::front_of_house::hosting as host;
 
 pub fn eat_at_restaurant() {
     // Absolute path
