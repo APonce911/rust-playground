@@ -1,0 +1,7 @@
+[package]
+name = "bitreq_test"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bitreq = { version = "0.3.1", features = ["https"] }
