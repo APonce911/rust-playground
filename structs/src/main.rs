@@ -1,3 +1,5 @@
+use std::cmp;
+
 // we're using owned types here like String
 // it's possible tu use references like &str as well using Lifetimes (cap10)
 struct User {
@@ -15,6 +17,40 @@ struct User {
 // https://doc.rust-lang.org/book/appendix-03-derivable-traits.html
 #[derive(Debug)]
 struct Color(i32, i32, i32); // tuple like struct
+
+impl Color {
+  // do not take ownership and returns a new color
+  fn invert(&self) -> Self {
+    Self (
+      255 - self.0,
+      255 - self.1,
+      255 - self.2
+    )
+  }
+
+  // takes ownership and mutate Color
+  fn brighter(&mut self) {
+      self.0 = cmp::min(50 + self.0, 255);
+      self.1 = cmp::min(50 + self.1, 255);
+      self.2 = cmp::min(50 + self.2, 255);
+  }
+
+  // with multiple params
+  fn complementary(&self, other: &Color) -> bool {
+    self.0 + other.0 == 255 &&
+    self.1 + other.1 == 255 &&
+    self.2 + other.2 == 255
+  }
+
+  // associated function. black color constructor
+  fn black() -> Self {
+    Self(
+      0,
+      0,
+      0
+    )
+  }
+}
 
 fn main() {
     let mut user1 = User {
@@ -77,6 +113,16 @@ fn main() {
 
     // works because main still owns
     println!("user3 favorite color is {:#?}", user3.favorite_color);
+
+    let mut inverted = Color(255, 128, 0).invert();
+    println!("inverted orange is {:#?}", inverted);
+    println!("complementary? {:#?}", inverted.complementary(&user3.favorite_color));
+
+    inverted.brighter();
+    println!("brigther inverted orange is {:#?}", inverted);
+
+    let black = Color::black();
+    println!("black {:#?}", black);
 }
 
 fn build_user(email: String, username: String) -> User {
