@@ -8,8 +8,11 @@ struct User {
     favorite_color: Color
 }
 
-// tuple like struct
-struct Color(i32, i32, i32);
+// include debugging functionallity to Color struct using Debug trait
+// derive attribute
+// https://doc.rust-lang.org/reference/attributes/derive.html
+#[derive(Debug)]
+struct Color(i32, i32, i32); // tuple like struct
 
 fn main() {
     let mut user1 = User {
@@ -57,6 +60,21 @@ fn main() {
     println!("{}, {}, {}", user3.favorite_color.0, user3.favorite_color.1, user3.favorite_color.2);
     // println!("{}, {}, {}", user2.favorite_color.0, user2.favorite_color.1, user2.favorite_color.2);
     // same as username, field value moved to user3
+
+    // Color doesn't implement std::fmt::Display
+    // so we use the specifier :? to use output format called Debug
+    println!("{:?}", user3.favorite_color);
+
+    // {:#?} to pretty print
+    println!("user3 favorite color is {:#?}", user3.favorite_color);
+
+    // dbg! macro. It uses stderr. It takes the ownership and return. Uses & to reference
+    // dbg!(user3.favorite_color);
+    // println!("user3 favorite color is {:#?}", user3.favorite_color); would not work if moved to dbg
+    dbg!(&user3.favorite_color);
+
+    // works because main still owns
+    println!("user3 favorite color is {:#?}", user3.favorite_color);
 }
 
 fn build_user(email: String, username: String) -> User {
