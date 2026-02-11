@@ -11,6 +11,8 @@ struct User {
 // include debugging functionallity to Color struct using Debug trait
 // derive attribute
 // https://doc.rust-lang.org/reference/attributes/derive.html
+// derivable traits others than Debug
+// https://doc.rust-lang.org/book/appendix-03-derivable-traits.html
 #[derive(Debug)]
 struct Color(i32, i32, i32); // tuple like struct
 
