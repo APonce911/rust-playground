@@ -1,9 +1,15 @@
+// we're using owned types here like String
+// it's possible tu use references like &str as well using Lifetimes (cap10)
 struct User {
     active: bool,
     username: String,
     email: String,
     sign_in_count: u64,
+    favorite_color: Color
 }
+
+// tuple like struct
+struct Color(i32, i32, i32);
 
 fn main() {
     let mut user1 = User {
@@ -11,6 +17,7 @@ fn main() {
         username: String::from("someusername123"),
         email: String::from("someone@example.com"),
         sign_in_count: 1,
+        favorite_color: Color(255, 255, 255)
     };
 
     user1.email = String::from("anotherusername123@example.com");
@@ -27,7 +34,7 @@ fn main() {
     //     email: String::from("email3@example.com"),
     //     sign_in_count: user2.sign_in_count,
     // }; 
-    let user3 = User {
+    let mut user3 = User {
       email: String::from("email3@example.com"),
       ..user2
     };
@@ -37,6 +44,19 @@ fn main() {
     // println!("{}", user2.username); 
     // do not work because field was moved to user3 when we used struct update syntax
     // the username field type (String) doesn't implement the copy trait
+
+    println!("{}, {}, {}", user1.favorite_color.0, user1.favorite_color.1, user1.favorite_color.2);
+
+    // destructuring
+    let Color(r, g, b) =   user1.favorite_color;
+    println!("{}, {}, {}", r, g, b);
+
+    let orange = Color(255, 128, 0);
+    user3.favorite_color = orange;
+
+    println!("{}, {}, {}", user3.favorite_color.0, user3.favorite_color.1, user3.favorite_color.2);
+    // println!("{}, {}, {}", user2.favorite_color.0, user2.favorite_color.1, user2.favorite_color.2);
+    // same as username, field value moved to user3
 }
 
 fn build_user(email: String, username: String) -> User {
@@ -45,5 +65,6 @@ fn build_user(email: String, username: String) -> User {
         username,
         email,
         sign_in_count: 1,
+        favorite_color: Color(0, 0, 0)
     }
 }
