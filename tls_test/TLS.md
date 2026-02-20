@@ -50,14 +50,14 @@ Bundle into a PFX (PKCS#12) — set your own export password or leave empty
       -certfile ca.crt \
       -passout pass:yourpassword
 
-### Client(One-way TLS)
+### Client (one-way TLS)
 
 Convert the CA certificate to DER format for the client
 
     openssl x509 -in ca.crt -outform DER -out ca_cert.der
 
 
-### Client(required for Mutual TLS)
+### Client (mutual TLS)
 
 Generate client private key
 
