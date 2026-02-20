@@ -12,7 +12,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // // Create an Identity from the key (DER) and certificate (DER)
     // let identity = Identity::from_pkcs8(&key_der, &cert_der)?;
 
-    let pfx = fs::read("src/identity.pfx")?;
+    // Read server identity
+    let pfx = fs::read("tls/server.pfx")?;
     let identity = Identity::from_pkcs12(&pfx, "")?;   // empty password
 
     // Build a native_tls::TlsAcceptor from the identity
