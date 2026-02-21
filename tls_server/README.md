@@ -2,11 +2,17 @@
 
 I've used this local server to test the https custom certificate implementation on [bitreq crate](https://github.com/rust-bitcoin/corepc/tree/master/bitreq)
 
-## Server run
+### Server run
 
-    cargo run
+with [rustls](https://github.com/rustls/rustls)
 
-## Client Run (one-way TLS)
+    cargo run --features tls-rustls
+
+alternatively, run with [native-tls](https://github.com/rust-native-tls/rust-native-tls)
+
+    cargo run --features tls-native
+
+### Client Run (one-way TLS)
 
 Use tls/ca_cert.der file
 
@@ -23,12 +29,12 @@ Bitreq Example:
     }
 
 
-## Client Run (mutual TLS)
+### Client Run (mutual TLS)
 
 native-tls Example:
 
     TODO
 
-## How to generate new Keys / Certificates
+### How to generate new Keys / Certificates
 
 Read [here](https://github.com/APonce911/rust-playground/blob/main/tls_server/TLS.md)  

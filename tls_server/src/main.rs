@@ -1,9 +1,20 @@
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
-use tokio_native_tls::{TlsAcceptor, native_tls::{Identity, TlsAcceptor as NativeTlsAcceptor}};
 use std::fs;
+#[cfg(feature = "tls-native")]
+use tokio_native_tls::{TlsAcceptor, native_tls::{Identity, TlsAcceptor as NativeTlsAcceptor}};
+
+#[cfg(feature = "tls-rustls")]
+use tokio_rustls::{TlsAcceptor, rustls::{Certificate, PrivateKey, ServerConfig}};
+#[cfg(feature = "tls-rustls")]
+use rustls_pemfile::{certs, pkcs8_private_keys};
+#[cfg(feature = "tls-rustls")]
+use std::io::BufReader;
+#[cfg(feature = "tls-rustls")]
+use std::sync::Arc;
 
 #[tokio::main]
+#[cfg(feature = "tls-native")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // // Read the DER certificate
     // let cert_der = fs::read("src/test_cert.der")?;
@@ -29,6 +40,46 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let (stream, _) = listener.accept().await?;
         let acceptor = acceptor.clone();
 
+        tokio::spawn(async move {
+            if let Err(e) = handle_connection(acceptor, stream).await {
+                eprintln!("Error handling connection: {}", e);
+            }
+        });
+    }
+}
+
+#[tokio::main]
+#[cfg(feature = "tls-rustls")]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cert_file = fs::read("tls/server.crt")?;
+    let key_file = fs::read("tls/server.key")?;
+
+    let cert_chain = certs(&mut BufReader::new(cert_file.as_slice()))?
+        .into_iter()
+        .map(Certificate)
+        .collect();
+
+    let mut keys: Vec<PrivateKey> = pkcs8_private_keys(&mut BufReader::new(key_file.as_slice()))?
+        .into_iter()
+        .map(PrivateKey)
+        .collect();
+
+    if keys.is_empty() {
+        return Err("No private key found".into());
+    }
+
+    let config = ServerConfig::builder()
+        .with_safe_defaults()          // enables TLS 1.2 and 1.3
+        .with_no_client_auth()
+        .with_single_cert(cert_chain, keys.remove(0))?;
+
+    let acceptor = TlsAcceptor::from(Arc::new(config));
+    let listener = TcpListener::bind("127.0.0.1:8443").await?;
+    println!("Async TLS server listening on 127.0.0.1:8443");
+
+    loop {
+        let (stream, _) = listener.accept().await?;
+        let acceptor = acceptor.clone();
         tokio::spawn(async move {
             if let Err(e) = handle_connection(acceptor, stream).await {
                 eprintln!("Error handling connection: {}", e);
