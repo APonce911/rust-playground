@@ -14,4 +14,12 @@ fn main() {
 
     let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 
+    let x = 5;
+    let z = &x;
+    let y = Box::new(x);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *z);
+    // deref operator works the same for boxes and references(&)
+    assert_eq!(5, *y);
 }
