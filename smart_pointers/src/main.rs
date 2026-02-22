@@ -1,14 +1,19 @@
 use crate::List::{Cons, Nil};
 use std::ops::Deref;
+use std::rc::Rc;
 
 enum List {
-    // Use Box smart pointer on recursive types, 
-    // Box is used to reference heap data without the compiler needing to know 
-    // the exact of data, only the pointer size(udata) 
+    // Use Box smart pointer on recursive types,
+    // Box is used to reference heap data without the compiler needing to know
+    // the exact of data, only the pointer size(udata)
     Cons(i32, Box<List>),
     Nil,
 }
 
+enum SharedList {
+    Cons(i32, Rc<SharedList>),
+    Nil,
+}
 
 // tuple type with single element T
 struct MyBox<T>(T);
@@ -85,6 +90,9 @@ fn main() {
     // do not work
     // hello(&m);
     drop_test();
+
+    reference_counted();
+
     println!("End of program")
 }
 
@@ -106,4 +114,15 @@ fn drop_test() {
     drop(c);
     println!("CustomSmartPointers created");
 } // without calling drop(), Rust drops automatically in LIFO order when OOC
- 
+
+fn reference_counted() {
+    // we're using full path for SharedList variants, but could the used as alias if
+    // use crate::SharedList::{Cons as SCons, Nil as SNil};
+    // let a :SharedList = SCons(5, Rc::new(SCons(10, Rc::new(SNil))));
+    let a = Rc::new(SharedList::Cons(
+        5,
+        Rc::new(SharedList::Cons(10, Rc::new(SharedList::Nil))),
+    ));
+    let b = SharedList::Cons(3, Rc::clone(&a));
+    let c = SharedList::Cons(4, Rc::clone(&a));
+}
