@@ -37,6 +37,16 @@ impl<T> BoxWithoutDeref<T> {
     }
 }
 
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+    }
+}
+
 fn main() {
     let b = Box::new(5);
     println!("b = {b}");
@@ -74,8 +84,26 @@ fn main() {
 
     // do not work
     // hello(&m);
+    drop_test();
+    println!("End of program")
 }
 
 fn hello(name: &str) {
     println!("Hello, {name}!");
 }
+
+fn drop_test() {
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    println!("CustomSmartPointer created");
+
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+    println!("CustomSmartPointer created");
+    // std::mem::drop
+    drop(c);
+    println!("CustomSmartPointers created");
+} // without calling drop(), Rust drops automatically in LIFO order when OOC
+ 
