@@ -29,6 +29,14 @@ impl<T> Deref for MyBox<T> {
     }
 }
 
+struct BoxWithoutDeref<T>(T);
+
+impl<T> BoxWithoutDeref<T> {
+    fn new(x: T) -> BoxWithoutDeref<T> {
+        BoxWithoutDeref(x)
+    }
+}
+
 fn main() {
     let b = Box::new(5);
     println!("b = {b}");
@@ -49,4 +57,25 @@ fn main() {
 
     assert_eq!(5, x);
     assert_eq!(5, *y);
+
+    let m = MyBox::new(String::from("Rust"));
+
+    // deref coercion calls deref recursively to reach desided type(&str)
+    hello(&m);
+    //otherwise, without deref coecion
+    hello(&(*m)[..]);
+    // or
+    hello(&(*m));
+    // or
+    hello(&*m);
+    // or without defer trait
+    let m = BoxWithoutDeref::new(String::from("without defer trait"));
+    hello(&m.0);
+
+    // do not work
+    // hello(&m);
+}
+
+fn hello(name: &str) {
+    println!("Hello, {name}!");
 }
