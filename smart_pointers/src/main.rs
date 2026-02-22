@@ -52,6 +52,14 @@ impl Drop for CustomSmartPointer {
     }
 }
 
+// MONKEY PATCH IS NOT POSSIBLE IN RUST!!!
+// impl<T> Drop for std::rc::Rc<T> {
+//     fn drop(&mut self) {
+//         // super;
+//         println!("count out of scope = {}", Rc::strong_count(&self));
+//     }
+// }
+
 fn main() {
     let b = Box::new(5);
     println!("b = {b}");
@@ -123,6 +131,16 @@ fn reference_counted() {
         5,
         Rc::new(SharedList::Cons(10, Rc::new(SharedList::Nil))),
     ));
+    println!("count after creating a = {}", Rc::strong_count(&a));
+
+    // .clone()  would work too, but Rust convention is using Rc::clone()
+    // let b = SharedList::Cons(3, a.clone());
     let b = SharedList::Cons(3, Rc::clone(&a));
-    let c = SharedList::Cons(4, Rc::clone(&a));
+    println!("count after creating b = {}", Rc::strong_count(&a));
+
+    {
+        let c = SharedList::Cons(4, Rc::clone(&a));
+        println!("count after creating c = {}", Rc::strong_count(&a));
+    }
+    println!("count after c goes out of scope = {}", Rc::strong_count(&a));
 }
